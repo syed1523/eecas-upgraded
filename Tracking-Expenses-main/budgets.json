@@ -1,0 +1,10 @@
+{
+  "meals": {
+    "limit": 200,
+    "used": 0
+  },
+  "travel": {
+    "limit": 500,
+    "used": 0
+  }
+}

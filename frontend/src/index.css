@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-base text-white font-sans antialiased min-h-screen;
+    background-image: radial-gradient(circle at 15% 50%, rgba(18, 23, 33, 0.8), transparent 25%),
+                      radial-gradient(circle at 85% 30%, rgba(8, 11, 18, 0.8), transparent 25%);
+    background-color: #080B12;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/5 border border-white/10 shadow-glass rounded-2xl;
+  }
+  
+  .glass-input {
+    @apply bg-transparent border-b border-white/20 focus:border-neon-blue focus:ring-0 focus:outline-none transition-all duration-300 placeholder-white/30 text-white p-2;
+  }
+  
+  .neon-focus {
+    @apply focus:shadow-[0_0_15px_rgba(0,243,255,0.5)] transition-shadow duration-300;
+  }
+}

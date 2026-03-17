@@ -1,0 +1,26 @@
+[
+  {
+    "id": "e1b29069-81e0-4beb-b6f6-936c37841ae8",
+    "employee_id": "emp-004",
+    "amount": 30.0,
+    "category": "office",
+    "date": "2026-02-06",
+    "receipt_path": null,
+    "status": "approved",
+    "fraud_score": 0.0,
+    "violations": []
+  },
+  {
+    "id": "7fadb51e-b2e6-4a3e-8a9e-aefda35bbb03",
+    "employee_id": "emp-002",
+    "amount": 25.0,
+    "category": "meals",
+    "date": "2026-02-06",
+    "receipt_path": null,
+    "status": "manager_review",
+    "fraud_score": 0.0,
+    "violations": [
+      "Receipt required"
+    ]
+  }
+]

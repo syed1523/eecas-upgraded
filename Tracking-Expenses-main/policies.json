@@ -1,0 +1,12 @@
+[
+  {
+    "category": "meals",
+    "max_amount": 50,
+    "requires_receipt": true
+  },
+  {
+    "category": "travel",
+    "max_amount": 200,
+    "requires_receipt": true
+  }
+]

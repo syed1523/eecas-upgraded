@@ -1,0 +1,99 @@
+﻿
+  compile_out_v2.txt:34:[ERROR] /C:/Users/S
+YEDABUTHAIR/.gemini/antigravity/playground/
+twilight-magnetosphere/backend/src/main/jav
+a/com/expense/system/controller/AuditorCont
+roller.java:[148,46] incompatible types: 
+inference variable T has incompatible 
+bounds
+  compile_out_v2.txt:35:    equality 
+constraints: org.springframework.data.domai
+n.Page<com.expense.system.entity.AuditLog>
+  compile_out_v2.txt:36:    lower bounds: 
+java.util.Map<K,V>
+  compile_out_v2.txt:37:[ERROR] /C:/Users/S
+YEDABUTHAIR/.gemini/antigravity/playground/
+twilight-magnetosphere/backend/src/main/jav
+a/com/expense/system/service/impl/ExpenseSe
+rviceImpl.java:[176,61] incompatible 
+types: java.lang.String cannot be 
+converted to java.lang.Long
+  compile_out_v2.txt:38:[ERROR] /C:/Users/S
+YEDABUTHAIR/.gemini/antigravity/playground/
+twilight-magnetosphere/backend/src/main/jav
+a/com/expense/system/service/impl/ExpenseSe
+rviceImpl.java:[309,9] cannot find symbol
+> compile_out_v2.txt:39:  symbol:   
+variable expense
+  compile_out_v2.txt:40:  location: class c
+om.expense.system.service.impl.ExpenseServi
+ceImpl
+  compile_out_v2.txt:41:[ERROR] /C:/Users/S
+YEDABUTHAIR/.gemini/antigravity/playground/
+twilight-magnetosphere/backend/src/main/jav
+a/com/expense/system/service/impl/ExpenseSe
+rviceImpl.java:[311,39] cannot find symbol
+> compile_out_v2.txt:42:  symbol:   
+variable expense
+  compile_out_v2.txt:43:  location: class c
+om.expense.system.service.impl.ExpenseServi
+ceImpl
+  compile_out_v2.txt:44:[INFO] 4 errors 
+  compile_out_v2.txt:45:[INFO] ------------
+-------------------------------------------
+------
+  compile_out_v2.txt:46:[INFO] ------------
+-------------------------------------------
+-----------------
+  compile_out_v2.txt:47:[INFO] BUILD 
+FAILURE
+  compile_out_v2.txt:53:[ERROR] /C:/Users/S
+YEDABUTHAIR/.gemini/antigravity/playground/
+twilight-magnetosphere/backend/src/main/jav
+a/com/expense/system/controller/AuditorCont
+roller.java:[148,46] incompatible types: 
+inference variable T has incompatible 
+bounds
+  compile_out_v2.txt:54:[ERROR]     
+equality constraints: org.springframework.d
+ata.domain.Page<com.expense.system.entity.A
+uditLog>
+  compile_out_v2.txt:55:[ERROR]     lower 
+bounds: java.util.Map<K,V>
+  compile_out_v2.txt:56:[ERROR] /C:/Users/S
+YEDABUTHAIR/.gemini/antigravity/playground/
+twilight-magnetosphere/backend/src/main/jav
+a/com/expense/system/service/impl/ExpenseSe
+rviceImpl.java:[176,61] incompatible 
+types: java.lang.String cannot be 
+converted to java.lang.Long
+  compile_out_v2.txt:57:[ERROR] /C:/Users/S
+YEDABUTHAIR/.gemini/antigravity/playground/
+twilight-magnetosphere/backend/src/main/jav
+a/com/expense/system/service/impl/ExpenseSe
+rviceImpl.java:[309,9] cannot find symbol
+> compile_out_v2.txt:58:[ERROR]   symbol:  
+ variable expense
+  compile_out_v2.txt:59:[ERROR]   
+location: class com.expense.system.service.
+impl.ExpenseServiceImpl
+  compile_out_v2.txt:60:[ERROR] /C:/Users/S
+YEDABUTHAIR/.gemini/antigravity/playground/
+twilight-magnetosphere/backend/src/main/jav
+a/com/expense/system/service/impl/ExpenseSe
+rviceImpl.java:[311,39] cannot find symbol
+> compile_out_v2.txt:61:[ERROR]   symbol:  
+ variable expense
+  compile_out_v2.txt:62:[ERROR]   
+location: class com.expense.system.service.
+impl.ExpenseServiceImpl
+  compile_out_v2.txt:63:[ERROR] -> [Help 1]
+  compile_out_v2.txt:64:[ERROR] 
+  compile_out_v2.txt:65:[ERROR] To see the 
+full stack trace of the errors, re-run 
+Maven with the -e switch.
+  compile_out_v2.txt:66:[ERROR] Re-run 
+Maven using the -X switch to enable full 
+debug logging.
+
+
