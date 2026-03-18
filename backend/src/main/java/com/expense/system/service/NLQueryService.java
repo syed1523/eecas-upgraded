@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class NLQueryService {
                 + (groqApiKey != null && !groqApiKey.isEmpty() ? "YES" : "NO - KEY IS MISSING"));
     }
 
+    @Transactional(readOnly = true)
     public List<Expense> executeNLQuery(String userQuery) {
         System.out.println("[NLQuery] Received query: " + userQuery);
 

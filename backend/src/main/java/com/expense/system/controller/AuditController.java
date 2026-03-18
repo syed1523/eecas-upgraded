@@ -5,6 +5,7 @@ import com.expense.system.service.NLQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class AuditController {
      */
     @PostMapping("/nl-query")
     @PreAuthorize("hasRole('FINANCE') or hasRole('AUDITOR')")
+    @Transactional(readOnly = true)
     public ResponseEntity<?> naturalLanguageQuery(@RequestBody Map<String, String> body) {
         String query = body.get("query");
         if (query == null || query.isBlank()) {

@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 @Table(name = "users", uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
