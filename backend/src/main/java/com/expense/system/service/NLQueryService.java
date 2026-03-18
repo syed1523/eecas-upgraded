@@ -9,7 +9,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,7 +31,7 @@ public class NLQueryService {
     @Value("${groq.api.key}")
     private String groqApiKey;
 
-    private final RestTemplate restTemplate = createRestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @PostConstruct
     public void logGroqApiKeyStatus() {
@@ -41,6 +40,8 @@ public class NLQueryService {
     }
 
     public List<Expense> executeNLQuery(String userQuery) {
+        System.out.println("[NLQuery] Received query: " + userQuery);
+
         try {
             String loweredUserQuery = userQuery.toLowerCase();
             if (containsUnsafeTerm(loweredUserQuery, UNSAFE_USER_TERMS)) {
@@ -65,20 +66,51 @@ public class NLQueryService {
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
             ResponseEntity<Map> response = restTemplate.postForEntity(GROQ_URL, request, Map.class);
 
-            @SuppressWarnings("unchecked")
-            List<Map<String, Object>> choices = (List<Map<String, Object>>) response.getBody().get("choices");
-            @SuppressWarnings("unchecked")
-            Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
-            Object content = message.get("content");
-            String jpqlString = content == null ? "" : content.toString().trim();
+            Map<?, ?> responseBody = response.getBody();
+            if (responseBody == null) {
+                throw new RuntimeException("Groq returned empty response");
+            }
 
-            if (containsUnsafeTerm(jpqlString.toLowerCase(), UNSAFE_JPQL_TERMS)) {
+            Object choicesObject = responseBody.get("choices");
+            if (!(choicesObject instanceof List<?> choices) || choices.isEmpty()) {
+                throw new RuntimeException("Groq returned empty response");
+            }
+
+            Object firstChoice = choices.get(0);
+            if (!(firstChoice instanceof Map<?, ?> choiceMap)) {
+                throw new RuntimeException("Groq returned empty response");
+            }
+
+            Object messageObject = choiceMap.get("message");
+            if (!(messageObject instanceof Map<?, ?> messageMap)) {
+                throw new RuntimeException("Groq returned empty response");
+            }
+
+            Object content = messageMap.get("content");
+            if (content == null) {
+                throw new RuntimeException("Groq returned empty response");
+            }
+
+            String jpql = content.toString().trim();
+            System.out.println("[NLQuery] Generated JPQL: " + jpql);
+
+            if (!jpql.regionMatches(true, 0, "SELECT", 0, "SELECT".length())) {
+                throw new RuntimeException("Invalid JPQL generated: " + jpql);
+            }
+
+            if (containsUnsafeTerm(jpql.toLowerCase(), UNSAFE_JPQL_TERMS)) {
                 throw new RuntimeException("Generated unsafe JPQL blocked");
             }
 
-            return entityManager.createQuery(jpqlString, Expense.class)
-                    .setMaxResults(50)
-                    .getResultList();
+            try {
+                return entityManager.createQuery(jpql, Expense.class)
+                        .setMaxResults(50)
+                        .getResultList();
+            } catch (Exception e) {
+                throw new RuntimeException("JPQL execution failed: " + e.getMessage() + " | JPQL was: " + jpql);
+            }
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("NL Query failed: " + e.getMessage());
         }
@@ -86,12 +118,5 @@ public class NLQueryService {
 
     private boolean containsUnsafeTerm(String value, List<String> terms) {
         return terms.stream().anyMatch(value::contains);
-    }
-
-    private RestTemplate createRestTemplate() {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(10000);
-        factory.setReadTimeout(10000);
-        return new RestTemplate(factory);
     }
 }

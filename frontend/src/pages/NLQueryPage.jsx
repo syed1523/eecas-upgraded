@@ -23,7 +23,14 @@ export default function NLQueryPage() {
       const res = await api.post("/audit/nl-query", { query });
       setResults(res.data);
     } catch (err) {
-      setError(err.response?.data || "Query failed. Please try again.");
+      const errData = err.response?.data;
+      if (typeof errData === "string") {
+        setError(errData);
+      } else if (errData?.message) {
+        setError(errData.message);
+      } else {
+        setError("Query failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -64,7 +71,7 @@ export default function NLQueryPage() {
 
         {error && (
           <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-red-400 mb-4">
-            {error}
+            <p>{error}</p>
           </div>
         )}
 

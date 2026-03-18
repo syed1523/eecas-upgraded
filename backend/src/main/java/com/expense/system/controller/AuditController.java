@@ -35,6 +35,7 @@ public class AuditController {
             List<Expense> results = nlQueryService.executeNLQuery(query);
             return ResponseEntity.ok(results);
         } catch (Exception e) {
+            System.out.println("[NLQuery Controller ERROR]: " + e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
