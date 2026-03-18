@@ -31,5 +31,6 @@ public class ExpenseResponseDTO {
     private String riskLevel;
     private String departmentName;
     private String employeeName;
+    private String remarks;
     private UserResponseDTO user;
 }

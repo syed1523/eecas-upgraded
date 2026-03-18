@@ -22,10 +22,10 @@ public class AuditController {
     /**
      * POST /api/audit/nl-query
      * Body: { "query": "Show all rejected expenses above 5000" }
-     * Secured for FINANCE and AUDITOR roles.
+     * Secured for FINANCE, MANAGER, and AUDITOR roles.
      */
     @PostMapping("/nl-query")
-    @PreAuthorize("hasRole('FINANCE') or hasRole('AUDITOR')")
+    @PreAuthorize("hasRole('FINANCE') or hasRole('MANAGER') or hasRole('AUDITOR')")
     @Transactional(readOnly = true)
     public ResponseEntity<?> naturalLanguageQuery(@RequestBody Map<String, String> body) {
         String query = body.get("query");

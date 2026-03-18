@@ -26,13 +26,13 @@ public class AuditTrailController {
     }
 
     @GetMapping("/recent")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR') or hasRole('FINANCE')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR') or hasRole('FINANCE') or hasRole('MANAGER')")
     public ResponseEntity<List<AuditLog>> getRecentActivity() {
         return ResponseEntity.ok(auditLogRepository.findTop50ByOrderByTimestampDesc());
     }
 
     @GetMapping("/today")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR') or hasRole('FINANCE')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR') or hasRole('FINANCE') or hasRole('MANAGER')")
     public ResponseEntity<List<AuditLog>> getTodayActivity() {
         LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
         return ResponseEntity.ok(auditLogRepository

@@ -55,6 +55,9 @@ function App() {
               {/* Finance Desk — Finance only */}
               <Route element={<RoleRoute allowed={['ROLE_FINANCE']} />}>
                 <Route path="/finance-desk" element={<FinanceDesk />} />
+              </Route>
+
+              <Route element={<RoleRoute allowed={['ROLE_FINANCE', 'ROLE_MANAGER', 'ROLE_AUDITOR']} />}>
                 <Route path="/finance/nl-query" element={<NLQueryPage />} />
               </Route>
 

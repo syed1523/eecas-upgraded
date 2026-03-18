@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LiveActivityFeed from '../components/LiveActivityFeed';
+import NLQueryPanel from '../components/NLQueryPanel';
 
 // ─── Shared Primitives ──────────────────────────────────────────────────────
 
@@ -291,6 +292,8 @@ const FinanceDashboard = ({ user }) => {
                 </SectionCard>
             </div>
 
+            <NLQueryPanel role="FINANCE" />
+
             <SectionCard title="Finance Spend Trajectory" delay={0.25}>
                 <div className="h-56">
                     <ResponsiveContainer width="100%" height="100%">
@@ -427,6 +430,8 @@ const ManagerDashboard = ({ user }) => {
                 </SectionCard>
             </div>
 
+            <NLQueryPanel role="MANAGER" />
+
             <div className="grid grid-cols-1 gap-6">
                 <LiveActivityFeed />
             </div>
@@ -532,6 +537,8 @@ const AuditorDashboard = ({ user }) => {
                     <LiveActivityFeed />
                 </SectionCard>
             </div>
+
+            <NLQueryPanel role="AUDITOR" />
 
             {/* Enterprise Spend Chart */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
