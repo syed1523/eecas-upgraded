@@ -1,6 +1,7 @@
 package com.expense.system.service;
 
 import com.expense.system.entity.Expense;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,15 +32,21 @@ public class NLQueryService {
     @Value("${groq.api.key}")
     private String groqApiKey;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = createRestTemplate();
+
+    @PostConstruct
+    public void logGroqApiKeyStatus() {
+        System.out.println("Groq API Key loaded: "
+                + (groqApiKey != null && !groqApiKey.isEmpty() ? "YES" : "NO - KEY IS MISSING"));
+    }
 
     public List<Expense> executeNLQuery(String userQuery) {
-        String loweredUserQuery = userQuery.toLowerCase();
-        if (containsUnsafeTerm(loweredUserQuery, UNSAFE_USER_TERMS)) {
-            throw new RuntimeException("Unsafe query blocked: " + userQuery);
-        }
-
         try {
+            String loweredUserQuery = userQuery.toLowerCase();
+            if (containsUnsafeTerm(loweredUserQuery, UNSAFE_USER_TERMS)) {
+                throw new RuntimeException("Unsafe query blocked: " + userQuery);
+            }
+
             Map<String, Object> requestBody = Map.of(
                     "model", MODEL,
                     "max_tokens", 200,
@@ -78,5 +86,12 @@ public class NLQueryService {
 
     private boolean containsUnsafeTerm(String value, List<String> terms) {
         return terms.stream().anyMatch(value::contains);
+    }
+
+    private RestTemplate createRestTemplate() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(10000);
+        factory.setReadTimeout(10000);
+        return new RestTemplate(factory);
     }
 }

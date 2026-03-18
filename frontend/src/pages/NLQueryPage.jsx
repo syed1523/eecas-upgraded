@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 
 const CHIPS = [
   "Show all rejected expenses",
@@ -20,13 +20,7 @@ export default function NLQueryPage() {
     setError("");
     setResults([]);
     try {
-      const token = localStorage.getItem("token")
-        || JSON.parse(localStorage.getItem("user") || "null")?.token;
-      const res = await axios.post(
-        "http://localhost:8081/api/audit/nl-query",
-        { query },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.post("/audit/nl-query", { query });
       setResults(res.data);
     } catch (err) {
       setError(err.response?.data || "Query failed. Please try again.");

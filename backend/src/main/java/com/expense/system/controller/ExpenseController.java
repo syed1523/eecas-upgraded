@@ -102,11 +102,17 @@ public class ExpenseController {
     @GetMapping("/my")
     @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('ADMIN')")
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
-    public ResponseEntity<Page<ExpenseResponseDTO>> getMyExpenses(@PageableDefault(size = 10) Pageable pageable) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        Page<Expense> expenses = expenseService.getExpensesByUser(username, pageable);
-        return ResponseEntity.ok(expenses.map(DTOMapper::toExpenseResponseDTO));
+    public ResponseEntity<?> getMyExpenses(@PageableDefault(size = 10) Pageable pageable) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = auth.getName();
+            Page<Expense> expenses = expenseService.getExpensesByUser(username, pageable);
+            return ResponseEntity.ok(expenses.map(DTOMapper::toExpenseResponseDTO));
+        } catch (Exception e) {
+            System.out.println("ERROR in /expenses/my: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
 
     @GetMapping

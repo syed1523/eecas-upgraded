@@ -27,7 +27,7 @@ const AuditorCenter = () => {
     // Create a local Axios instance for forensics since they aren't completely mapped in api.js yet to save time
     const user = JSON.parse(localStorage.getItem('user'));
     const forensicApi = axios.create({
-        baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/api',
+        baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8082/api',
         headers: { Authorization: `Bearer ${user?.token}` }
     });
 
