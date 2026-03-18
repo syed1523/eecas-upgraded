@@ -1,5 +1,6 @@
 package com.expense.system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -42,6 +43,7 @@ public class Expense {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
+    @JsonIgnore
     private Department department;
 
     @Column(name = "department_name", length = 100)
@@ -60,9 +62,7 @@ public class Expense {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({
-            "hibernateLazyInitializer", "handler", "expenses", "password"
-    })
+    @JsonIgnore
     private User user;
 
     private boolean flagged;

@@ -1,13 +1,16 @@
 package com.expense.system.service.impl;
 
 import com.expense.system.annotation.Auditable;
+import com.expense.system.dto.DTOMapper;
 import com.expense.system.dto.ExpenseDTO;
+import com.expense.system.dto.ExpenseResponseDTO;
 import com.expense.system.entity.Expense;
 import com.expense.system.entity.User;
 import com.expense.system.exception.InvalidStateTransitionException;
 import com.expense.system.exception.UnauthorizedActionException;
 import com.expense.system.repository.ExpenseRepository;
 import com.expense.system.repository.UserRepository;
+import com.expense.system.service.ApprovalService;
 import com.expense.system.service.AuditService;
 import com.expense.system.service.BudgetService;
 import com.expense.system.service.DynamicPolicyEvaluatorService;
@@ -24,11 +27,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Set;
 import java.math.BigDecimal;
 import com.expense.system.entity.ERole;
+import org.springframework.data.domain.PageRequest;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
+    private static final Set<String> PENDING_SUMMARY_STATUSES = Set.of(
+            "PENDING",
+            "SUBMITTED",
+            "PENDING_MANAGER",
+            "PENDING_SECOND_APPROVAL",
+            "PENDING_FINANCE",
+            "FLAGGED",
+            "ESCALATED",
+            "AUDIT_REVIEW",
+            "REQUIRES_EXPLANATION",
+            "REQUIRES_ACKNOWLEDGMENT");
+
+    private static final Set<String> APPROVED_SUMMARY_STATUSES = Set.of(
+            "APPROVED",
+            "APPROVED_WITH_OVERRIDE",
+            "CLEARED",
+            "APPROVED_PENDING_PAYMENT",
+            "PAID");
+
     @Autowired
     private ExpenseRepository expenseRepository;
     @Autowired
@@ -39,6 +64,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     private BudgetService budgetService;
     @Autowired
     private AuditService auditService;
+    @Autowired
+    private ApprovalService approvalService;
 
     @Autowired
     private ReceiptProcessingService receiptProcessingService;
@@ -266,7 +293,10 @@ public class ExpenseServiceImpl implements ExpenseService {
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public org.springframework.data.domain.Page<Expense> getAllExpenses(
             org.springframework.data.domain.Pageable pageable) {
-        return expenseRepository.findAll(pageable);
+        org.springframework.data.domain.Page<Expense> expenses = expenseRepository.findAll(pageable);
+        System.out.println("[ExpenseController] Returning " + expenses.getNumberOfElements()
+                + " expense(s) on page " + pageable.getPageNumber() + " of " + expenses.getTotalPages());
+        return expenses;
     }
 
     @Override
@@ -317,24 +347,10 @@ public class ExpenseServiceImpl implements ExpenseService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<Expense> expenses;
-        boolean isAdminOrFinance = user.getRoles().stream()
-                .anyMatch(r -> r.getName() == ERole.ROLE_ADMIN || r.getName() == ERole.ROLE_FINANCE);
-        boolean isManager = user.getRoles().stream()
-                .anyMatch(r -> r.getName() == ERole.ROLE_MANAGER);
-        boolean isAuditor = user.getRoles().stream()
-                .anyMatch(r -> r.getName() == ERole.ROLE_AUDITOR);
+        List<Expense> expenses = getScopedExpenses(user);
 
-        if (isAdminOrFinance || isAuditor) {
-            expenses = expenseRepository.findAll();
-        } else if (isManager && user.getDepartment() != null) {
-            expenses = expenseRepository.findAll().stream()
-                    .filter(e -> e.getDepartment() != null
-                            && e.getDepartment().getId().equals(user.getDepartment().getId()))
-                    .toList();
-        } else {
-            expenses = expenseRepository.findByUserId(user.getId());
-        }
+        System.out.println("[DashboardSummary] User " + username + " resolved " + expenses.size()
+                + " scoped expense(s)");
 
         BigDecimal totalPending = BigDecimal.ZERO;
         BigDecimal totalApproved = BigDecimal.ZERO;
@@ -343,12 +359,11 @@ public class ExpenseServiceImpl implements ExpenseService {
         Map<String, BigDecimal> categoryMap = new HashMap<>();
 
         for (Expense e : expenses) {
-            if ("PENDING_MANAGER".equals(e.getStatus()) || "PENDING_FINANCE".equals(e.getStatus())) {
+            if (e.getStatus() != null && PENDING_SUMMARY_STATUSES.contains(e.getStatus())) {
                 if (e.getAmount() != null)
                     totalPending = totalPending.add(e.getAmount());
                 pendingCount++;
-            } else if ("APPROVED".equals(e.getStatus()) || "PAID".equals(e.getStatus())
-                    || "CLEARED".equals(e.getStatus())) {
+            } else if (e.getStatus() != null && APPROVED_SUMMARY_STATUSES.contains(e.getStatus())) {
                 if (e.getAmount() != null)
                     totalApproved = totalApproved.add(e.getAmount());
                 if (e.getCategory() != null && e.getAmount() != null) {
@@ -380,5 +395,76 @@ public class ExpenseServiceImpl implements ExpenseService {
         summary.put("monthly", monthly);
 
         return summary;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Object> getFinanceDashboard(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Expense> expenses = getScopedExpenses(user);
+        Map<String, Object> summary = new HashMap<>(getDashboardSummary(username));
+
+        long pendingReviewCount = approvalService.getPendingApprovals(username, PageRequest.of(0, 1)).getTotalElements();
+        long paymentQueueCount = expenses.stream()
+                .filter(e -> "APPROVED".equals(e.getStatus())
+                        || "CLEARED".equals(e.getStatus())
+                        || "APPROVED_PENDING_PAYMENT".equals(e.getStatus()))
+                .count();
+        long approvedItemCount = expenses.stream()
+                .filter(e -> APPROVED_SUMMARY_STATUSES.contains(e.getStatus()))
+                .count();
+        long rejectedCount = expenses.stream()
+                .filter(e -> "REJECTED".equals(e.getStatus()))
+                .count();
+
+        List<ExpenseResponseDTO> recentExpenses = expenses.stream()
+                .sorted(Comparator.comparing(ExpenseServiceImpl::sortInstant).reversed())
+                .limit(5)
+                .map(DTOMapper::toExpenseResponseDTO)
+                .toList();
+
+        summary.put("visibleExpenseCount", expenses.size());
+        summary.put("pendingReviewCount", pendingReviewCount);
+        summary.put("paymentQueueCount", paymentQueueCount);
+        summary.put("approvedItemCount", approvedItemCount);
+        summary.put("rejectedCount", rejectedCount);
+        summary.put("recentExpenses", recentExpenses);
+
+        System.out.println("[FinanceDashboard] User " + username + " pendingReviewCount=" + pendingReviewCount
+                + ", paymentQueueCount=" + paymentQueueCount + ", visibleExpenseCount=" + expenses.size());
+
+        return summary;
+    }
+
+    private List<Expense> getScopedExpenses(User user) {
+        boolean isAdminOrFinance = user.getRoles().stream()
+                .anyMatch(r -> r.getName() == ERole.ROLE_ADMIN || r.getName() == ERole.ROLE_FINANCE);
+        boolean isManager = user.getRoles().stream()
+                .anyMatch(r -> r.getName() == ERole.ROLE_MANAGER);
+        boolean isAuditor = user.getRoles().stream()
+                .anyMatch(r -> r.getName() == ERole.ROLE_AUDITOR);
+
+        if (isAdminOrFinance || isAuditor) {
+            return expenseRepository.findAll();
+        }
+        if (isManager && user.getDepartment() != null) {
+            return expenseRepository.findAll().stream()
+                    .filter(e -> e.getDepartment() != null
+                            && e.getDepartment().getId().equals(user.getDepartment().getId()))
+                    .toList();
+        }
+        return expenseRepository.findByUserId(user.getId());
+    }
+
+    private static java.time.LocalDateTime sortInstant(Expense expense) {
+        if (expense.getCreatedAt() != null) {
+            return expense.getCreatedAt();
+        }
+        if (expense.getExpenseDate() != null) {
+            return expense.getExpenseDate().atStartOfDay();
+        }
+        return java.time.LocalDateTime.MIN;
     }
 }

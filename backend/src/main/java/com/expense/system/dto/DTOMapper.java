@@ -5,6 +5,7 @@ import com.expense.system.entity.Budget;
 import com.expense.system.entity.ComplianceRule;
 import com.expense.system.entity.Expense;
 import com.expense.system.entity.User;
+import org.hibernate.Hibernate;
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class DTOMapper {
         }
         dto.setActive(user.isActive());
         dto.setIsActive(user.getIsActive());
-        if (user.getDepartment() != null) {
+        if (user.getDepartment() != null && Hibernate.isInitialized(user.getDepartment())) {
             dto.setDepartmentId(user.getDepartment().getId());
             dto.setDepartmentName(user.getDepartment().getName());
         }
@@ -42,11 +43,12 @@ public class DTOMapper {
         dto.setCurrency(expense.getCurrency());
         dto.setExpenseDate(expense.getExpenseDate());
         dto.setCategory(expense.getCategory());
-        dto.setDepartment(expense.getDepartment() != null ? expense.getDepartment().getName() : null);
+        String departmentName = resolveDepartmentName(expense);
+        dto.setDepartment(departmentName);
         dto.setProject(expense.getProject());
         dto.setReceiptPath(expense.getReceiptPath());
         dto.setReceiptHash(expense.getReceiptHash());
-        dto.setStatus(expense.getStatus());
+        dto.setStatus(expense.getStatus() != null ? expense.getStatus().toString() : null);
         dto.setFlagged(expense.isFlagged());
         dto.setViolationDetails(expense.getViolationDetails());
         dto.setRiskScore(expense.getRiskScore());
@@ -58,9 +60,45 @@ public class DTOMapper {
         dto.setFlagReasons(expense.getFlagReasons());
         dto.setFlagCount(expense.getFlagCount());
         dto.setRiskLevel(expense.getRiskLevel());
-        dto.setDepartmentName(expense.getDepartmentName() != null ? expense.getDepartmentName() : "");
-        dto.setUser(toUserResponseDTO(expense.getUser()));
+        dto.setDepartmentName(departmentName);
+        dto.setEmployeeName(resolveEmployeeName(expense));
+        dto.setUser(expense.getUser() != null ? toUserResponseDTO(expense.getUser()) : null);
         return dto;
+    }
+
+    public static ExpenseResponseDTO mapToDTO(Expense expense) {
+        if (expense == null)
+            return null;
+        ExpenseResponseDTO dto = new ExpenseResponseDTO();
+        dto.setId(expense.getId());
+        dto.setAmount(expense.getAmount());
+        dto.setCategory(expense.getCategory());
+        dto.setStatus(expense.getStatus() != null ? expense.getStatus().toString() : null);
+        dto.setDepartmentName(resolveDepartmentName(expense));
+        dto.setEmployeeName(resolveEmployeeName(expense));
+        dto.setRiskLevel(expense.getRiskLevel());
+        return dto;
+    }
+
+    private static String resolveDepartmentName(Expense expense) {
+        if (expense.getDepartmentName() != null && !expense.getDepartmentName().isBlank()) {
+            return expense.getDepartmentName();
+        }
+        if (expense.getDepartment() != null && Hibernate.isInitialized(expense.getDepartment())) {
+            return expense.getDepartment().getName();
+        }
+        return null;
+    }
+
+    private static String resolveEmployeeName(Expense expense) {
+        if (expense.getUser() == null) {
+            return null;
+        }
+        String name = expense.getUser().getName();
+        if (name != null && !name.isBlank()) {
+            return name;
+        }
+        return expense.getUser().getUsername();
     }
 
     public static ApprovalResponseDTO toApprovalResponseDTO(Approval approval) {

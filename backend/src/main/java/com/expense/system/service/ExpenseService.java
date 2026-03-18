@@ -28,4 +28,6 @@ public interface ExpenseService {
     Expense updateExpenseStatus(Long id, String status, String comments, String username);
 
     Map<String, Object> getDashboardSummary(String username);
+
+    Map<String, Object> getFinanceDashboard(String username);
 }

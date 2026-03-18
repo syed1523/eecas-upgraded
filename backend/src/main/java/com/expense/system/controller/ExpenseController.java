@@ -131,6 +131,14 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.getDashboardSummary(auth.getName()));
     }
 
+    @GetMapping("/dashboard/finance")
+    @PreAuthorize("hasRole('FINANCE') or hasRole('ADMIN')")
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public ResponseEntity<?> getFinanceDashboard() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok(expenseService.getFinanceDashboard(auth.getName()));
+    }
+
     @GetMapping("/{id}/timeline")
     @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('FINANCE') or hasRole('ADMIN') or hasRole('AUDITOR')")
     @org.springframework.transaction.annotation.Transactional(readOnly = true)

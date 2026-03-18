@@ -1,5 +1,7 @@
 package com.expense.system.service;
 
+import com.expense.system.dto.DTOMapper;
+import com.expense.system.dto.ExpenseResponseDTO;
 import com.expense.system.entity.Expense;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -41,7 +43,7 @@ public class NLQueryService {
     }
 
     @Transactional(readOnly = true)
-    public List<Expense> executeNLQuery(String userQuery) {
+    public List<ExpenseResponseDTO> executeNLQuery(String userQuery) {
         System.out.println("[NLQuery] Received query: " + userQuery);
 
         try {
@@ -105,9 +107,14 @@ public class NLQueryService {
             }
 
             try {
-                return entityManager.createQuery(jpql, Expense.class)
+                List<Expense> expenses = entityManager.createQuery(jpql, Expense.class)
                         .setMaxResults(50)
                         .getResultList();
+                List<ExpenseResponseDTO> results = expenses.stream()
+                        .map(DTOMapper::mapToDTO)
+                        .toList();
+                System.out.println("[NLQuery] Returning " + results.size() + " expense DTO(s)");
+                return results;
             } catch (Exception e) {
                 throw new RuntimeException("JPQL execution failed: " + e.getMessage() + " | JPQL was: " + jpql);
             }

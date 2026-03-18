@@ -1,6 +1,6 @@
 package com.expense.system.controller;
 
-import com.expense.system.entity.Expense;
+import com.expense.system.dto.ExpenseResponseDTO;
 import com.expense.system.service.NLQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,7 @@ public class AuditController {
         }
 
         try {
-            List<Expense> results = nlQueryService.executeNLQuery(query);
+            List<ExpenseResponseDTO> results = nlQueryService.executeNLQuery(query);
             return ResponseEntity.ok(results);
         } catch (Exception e) {
             System.out.println("[NLQuery Controller ERROR]: " + e.getMessage());

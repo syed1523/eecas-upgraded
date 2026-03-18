@@ -202,6 +202,116 @@ const EmployeeDashboard = ({ user }) => {
 
 // ─── Manager View ────────────────────────────────────────────────────────────
 
+const FinanceDashboard = ({ user }) => {
+    const [summary, setSummary] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        api.get('/expenses/dashboard/finance')
+            .then((res) => {
+                console.log(res.data);
+                setSummary(res.data);
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) return <div className="text-gray-400 text-sm text-center py-10">Loading finance workspace...</div>;
+
+    const recent5 = summary?.recentExpenses || [];
+
+    return (
+        <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatCard title="Pending Review" value={summary?.pendingReviewCount || 0} subtext="Awaiting finance action" icon={Clock} color="text-yellow-400" />
+                <StatCard title="Approved Items" value={summary?.approvedItemCount || 0} subtext="Approved or cleared expenses" icon={CheckCircle} color="text-green-400" />
+                <StatCard title="Rejected Items" value={summary?.rejectedCount || 0} subtext="Returned or denied claims" icon={XCircle} color="text-red-400" />
+                <StatCard title="Payment Queue" value={summary?.paymentQueueCount || 0} subtext="Ready for settlement" icon={TrendingUp} color="text-neon-blue" />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <SectionCard title="Recent Expenses" delay={0.1}>
+                    {recent5.length === 0
+                        ? <p className="text-gray-500 text-sm">No expense data available.</p>
+                        : <div className="space-y-3">
+                            {recent5.map(e => (
+                                <div key={e.id} className="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2">
+                                    <div className="space-y-1 min-w-0">
+                                        <p className="text-white text-sm font-medium truncate max-w-[180px]">{e.title}</p>
+                                        <p className="text-[11px] text-gray-400 truncate max-w-[180px]">
+                                            {e.employeeName || e.user?.username || user?.username} · {e.departmentName || 'Unassigned'}
+                                        </p>
+                                        <StatusBadge status={e.status} />
+                                    </div>
+                                    <div className="flex flex-col items-end gap-1">
+                                        <span className="text-white text-sm font-bold">₹{e.amount}</span>
+                                        <span className="text-[10px] text-gray-500">{e.expenseDate || '—'}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    }
+                </SectionCard>
+
+                <SectionCard title="Finance Snapshot" delay={0.15}>
+                    <div className="space-y-3">
+                        <div className="bg-white/5 rounded-lg px-4 py-3 flex items-center justify-between">
+                            <span className="text-gray-400 text-sm">Visible expenses</span>
+                            <span className="text-white font-bold">{summary?.visibleExpenseCount || 0}</span>
+                        </div>
+                        <div className="bg-white/5 rounded-lg px-4 py-3 flex items-center justify-between">
+                            <span className="text-gray-400 text-sm">Pending value</span>
+                            <span className="text-white font-bold">{formatINR(summary?.totalPending || 0)}</span>
+                        </div>
+                        <div className="bg-white/5 rounded-lg px-4 py-3 flex items-center justify-between">
+                            <span className="text-gray-400 text-sm">Approved value</span>
+                            <span className="text-white font-bold">{formatINR(summary?.totalApproved || 0)}</span>
+                        </div>
+                        <div className="bg-white/5 rounded-lg px-4 py-3 flex items-center justify-between">
+                            <span className="text-gray-400 text-sm">Pending count</span>
+                            <span className="text-white font-bold">{summary?.pendingCount || 0}</span>
+                        </div>
+                    </div>
+                </SectionCard>
+
+                <SectionCard title="Category Breakdown" delay={0.2}>
+                    <div className="h-52">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie data={summary?.categories || []} cx="50%" cy="50%" innerRadius={45} outerRadius={70} paddingAngle={4} dataKey="value">
+                                    {(summary?.categories || []).map((_, i) => (
+                                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip contentStyle={{ backgroundColor: '#121721', borderColor: '#333', color: '#fff' }} />
+                                <Legend iconSize={8} wrapperStyle={{ fontSize: 11 }} />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </SectionCard>
+            </div>
+
+            <SectionCard title="Finance Spend Trajectory" delay={0.25}>
+                <div className="h-56">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={summary?.monthly || []}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                            <XAxis dataKey="name" stroke="#666" fontSize={11} tickLine={false} axisLine={false} />
+                            <YAxis stroke="#666" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(value) => `₹${value.toLocaleString('en-IN')}`} />
+                            <Tooltip contentStyle={{ backgroundColor: '#121721', borderColor: '#333', color: '#fff' }} itemStyle={{ color: '#00f3ff' }} formatter={(value, name) => [formatINR(value), name]} />
+                            <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
+                                {(summary?.monthly || []).map((_, i) => (
+                                    <Cell key={i} fill={i % 2 === 0 ? '#00f3ff' : '#bd00ff'} />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            </SectionCard>
+        </div>
+    );
+};
+
 const ManagerDashboard = ({ user }) => {
     const [teamSummary, setTeamSummary] = useState(null);
     const [pending, setPending] = useState([]);
@@ -533,11 +643,13 @@ const Dashboard = () => {
     const { user } = useAuth();
 
     const isManager = user?.roles?.includes('ROLE_MANAGER');
+    const isFinance = user?.roles?.includes('ROLE_FINANCE');
     const isAuditor = user?.roles?.includes('ROLE_AUDITOR');
     const isAdmin = user?.roles?.includes('ROLE_ADMIN');
 
     const roleLabel = isAdmin ? 'Administrator'
         : isManager ? 'Finance Manager'
+            : isFinance ? 'Finance Officer'
             : isAuditor ? 'Auditor'
                 : 'Employee';
 
@@ -553,8 +665,9 @@ const Dashboard = () => {
 
             {isAdmin && <AdminDashboard user={user} />}
             {isManager && !isAdmin && <ManagerDashboard user={user} />}
+            {isFinance && !isManager && !isAdmin && <FinanceDashboard user={user} />}
             {isAuditor && !isAdmin && <AuditorDashboard user={user} />}
-            {!isManager && !isAuditor && !isAdmin && <EmployeeDashboard user={user} />}
+            {!isManager && !isFinance && !isAuditor && !isAdmin && <EmployeeDashboard user={user} />}
         </div>
     );
 };

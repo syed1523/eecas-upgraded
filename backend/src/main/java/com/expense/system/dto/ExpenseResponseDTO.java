@@ -30,5 +30,6 @@ public class ExpenseResponseDTO {
     private Integer flagCount;
     private String riskLevel;
     private String departmentName;
+    private String employeeName;
     private UserResponseDTO user;
 }

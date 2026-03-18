@@ -49,20 +49,69 @@ public class AlertsController {
     @GetMapping("/manager")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<String>> getManagerAlerts(Authentication auth) {
-        // Simplified Logic: if user's department has a lot of flagged, throw alert
+        User user = getAuthenticatedUser(auth);
         List<String> alerts = new java.util.ArrayList<>();
-        // Note: Real logic would check actual thresholds from configs.
-        alerts.add("SLA Monitoring Active");
+        if (user.getDepartment() == null) {
+            return ResponseEntity.ok(alerts);
+        }
+
+        List<Expense> deptExpenses = expenseRepository.findByUserDepartmentId(user.getDepartment().getId());
+        long flaggedCount = deptExpenses.stream().filter(Expense::isFlagged).count();
+        long escalatedCount = deptExpenses.stream()
+                .filter(e -> "ESCALATED".equals(e.getStatus()) || "AUDIT_REVIEW".equals(e.getStatus()))
+                .count();
+        long secondApprovalCount = deptExpenses.stream()
+                .filter(e -> "PENDING_SECOND_APPROVAL".equals(e.getStatus()))
+                .count();
+
+        if (flaggedCount > 0) {
+            alerts.add(flaggedCount + " flagged expense(s) need department attention");
+        }
+        if (escalatedCount > 0) {
+            alerts.add(escalatedCount + " expense(s) are escalated or under audit review");
+        }
+        if (secondApprovalCount > 0) {
+            alerts.add(secondApprovalCount + " expense(s) are waiting for second approval");
+        }
+
         return ResponseEntity.ok(alerts);
     }
 
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<String>> getAdminAlerts(Authentication auth) {
-        // Mock enterprise-level governance alerts
+        List<Expense> expenses = expenseRepository.findAll();
         List<String> alerts = new java.util.ArrayList<>();
-        alerts.add("Enterprise Risk Index slightly elevated.");
-        alerts.add("3 Departments currently under SLA compliance.");
+
+        long flaggedCount = expenses.stream().filter(Expense::isFlagged).count();
+        long escalatedCount = expenses.stream()
+                .filter(e -> "ESCALATED".equals(e.getStatus()) || "AUDIT_REVIEW".equals(e.getStatus()))
+                .count();
+        long pendingFinanceCount = expenses.stream()
+                .filter(e -> "PENDING_FINANCE".equals(e.getStatus()))
+                .count();
+        long departmentsAtRisk = expenses.stream()
+                .filter(e -> e.isFlagged() || "ESCALATED".equals(e.getStatus()) || "AUDIT_REVIEW".equals(e.getStatus()))
+                .map(e -> e.getDepartmentName() != null && !e.getDepartmentName().isBlank()
+                        ? e.getDepartmentName()
+                        : e.getDepartment() != null ? e.getDepartment().getName() : null)
+                .filter(name -> name != null && !name.isBlank())
+                .distinct()
+                .count();
+
+        if (flaggedCount > 0) {
+            alerts.add(flaggedCount + " flagged expense(s) are currently open.");
+        }
+        if (escalatedCount > 0) {
+            alerts.add(escalatedCount + " expense(s) are escalated or under audit review.");
+        }
+        if (pendingFinanceCount > 0) {
+            alerts.add(pendingFinanceCount + " expense(s) are waiting on finance approval.");
+        }
+        if (departmentsAtRisk > 0) {
+            alerts.add(departmentsAtRisk + " department(s) currently have active compliance issues.");
+        }
+
         return ResponseEntity.ok(alerts);
     }
 }

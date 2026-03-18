@@ -55,12 +55,22 @@ public class AdminController {
     @Autowired
     PolicyRecommendationRepository recommendationRepository;
 
+    @Autowired
+    ExpenseRepository expenseRepository;
+
     // ─── Policy Recommendations (Phase 7)
     // ────────────────────────────────────────────────
 
     @GetMapping("/recommendations")
+    @Transactional
     public ResponseEntity<List<PolicyRecommendation>> getRecommendations() {
-        return ResponseEntity.ok(recommendationRepository.findAll());
+        List<PolicyRecommendation> recommendations = recommendationRepository.findAll();
+        if (!recommendations.isEmpty()) {
+            return ResponseEntity.ok(recommendations);
+        }
+
+        List<PolicyRecommendation> generated = generateRecommendations();
+        return ResponseEntity.ok(generated);
     }
 
     @Transactional
@@ -260,5 +270,107 @@ public class AdminController {
             return m;
         });
         return ResponseEntity.ok(dto);
+    }
+
+    private List<PolicyRecommendation> generateRecommendations() {
+        List<Expense> expenses = expenseRepository.findAll();
+        if (expenses.isEmpty()) {
+            return List.of();
+        }
+
+        Map<String, Integer> issueCounts = new LinkedHashMap<>();
+        for (Expense expense : expenses) {
+            for (String issue : extractRecommendationIssues(expense)) {
+                issueCounts.merge(issue, 1, Integer::sum);
+            }
+        }
+
+        if (issueCounts.isEmpty()) {
+            long pendingWorkflow = expenses.stream()
+                    .filter(expense -> expense.getStatus() != null
+                            && List.of("PENDING_MANAGER", "PENDING_SECOND_APPROVAL", "PENDING_FINANCE", "ESCALATED",
+                                    "AUDIT_REVIEW", "FLAGGED", "REQUIRES_EXPLANATION")
+                                    .contains(expense.getStatus()))
+                    .count();
+            if (pendingWorkflow > 0) {
+                issueCounts.put("WORKFLOW_BACKLOG", (int) pendingWorkflow);
+            }
+        }
+
+        double riskIndex = calculateRiskIndex(expenses);
+        double complianceScore = Math.max(0.0, 100.0 - riskIndex);
+
+        return issueCounts.entrySet().stream()
+                .sorted((left, right) -> Integer.compare(right.getValue(), left.getValue()))
+                .limit(5)
+                .map(entry -> {
+                    PolicyRecommendation recommendation = new PolicyRecommendation();
+                    recommendation.setViolationType(entry.getKey());
+                    recommendation.setOccurrenceCount(entry.getValue());
+                    recommendation.setSuggestedRuleAdjustment(buildRecommendationText(entry.getKey(), entry.getValue()));
+                    recommendation.setStatus(RecommendationStatus.PENDING);
+                    recommendation.setGeneratedAt(LocalDateTime.now());
+                    recommendation.setComplianceScoreContext(complianceScore);
+                    recommendation.setRiskIndexContext(riskIndex);
+                    return recommendationRepository.save(recommendation);
+                })
+                .toList();
+    }
+
+    private List<String> extractRecommendationIssues(Expense expense) {
+        List<String> issues = new java.util.ArrayList<>();
+
+        if (expense.getFlagReasons() != null && !expense.getFlagReasons().isBlank()) {
+            for (String issue : expense.getFlagReasons().split("[,;]")) {
+                String normalized = issue.trim().replace(' ', '_').toUpperCase();
+                if (!normalized.isBlank()) {
+                    issues.add(normalized);
+                }
+            }
+        }
+
+        if (issues.isEmpty() && expense.getViolationDetails() != null && !expense.getViolationDetails().isBlank()) {
+            String normalized = expense.getViolationDetails().split("[;|]")[0].trim().replace(' ', '_').toUpperCase();
+            if (!normalized.isBlank()) {
+                issues.add(normalized);
+            }
+        }
+
+        if (issues.isEmpty() && Boolean.TRUE.equals(expense.getIsAnomaly())) {
+            issues.add("STATISTICAL_ANOMALY");
+        }
+
+        return issues;
+    }
+
+    private String buildRecommendationText(String violationType, int occurrences) {
+        if ("WORKFLOW_BACKLOG".equals(violationType)) {
+            return "Review approval SLAs and escalation thresholds. There are " + occurrences
+                    + " open workflow items waiting in review queues.";
+        }
+        return "Review the rule or threshold behind " + violationType.replace('_', ' ').toLowerCase()
+                + ". This pattern appeared in " + occurrences + " expense records and should be tightened or clarified.";
+    }
+
+    private double calculateRiskIndex(List<Expense> expenses) {
+        if (expenses.isEmpty()) {
+            return 0.0;
+        }
+
+        long flaggedCount = expenses.stream()
+                .filter(expense -> expense.isFlagged() || Boolean.TRUE.equals(expense.getIsAnomaly()))
+                .count();
+        long escalatedCount = expenses.stream()
+                .filter(expense -> "ESCALATED".equals(expense.getStatus()) || "AUDIT_REVIEW".equals(expense.getStatus()))
+                .count();
+        long rejectedCount = expenses.stream()
+                .filter(expense -> "REJECTED".equals(expense.getStatus()))
+                .count();
+
+        double flaggedRate = (flaggedCount * 100.0) / expenses.size();
+        double escalatedRate = (escalatedCount * 100.0) / expenses.size();
+        double rejectedRate = (rejectedCount * 100.0) / expenses.size();
+
+        return Math.min(100.0, (flaggedRate * 0.5) + (escalatedRate * 0.3) + (rejectedRate * 0.2));
     }
 }
