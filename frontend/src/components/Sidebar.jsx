@@ -73,7 +73,7 @@ const Sidebar = () => {
             {/* Brand + Identity */}
             <div className="p-6 border-b border-white/10">
                 <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-primary-gradient uppercase tracking-widest">
-                    Aegis Enterprise
+                    EECAS Enterprise
                 </h1>
                 <p className="text-xs text-gray-500 tracking-wider mt-1">
                     Logged in as <span className="text-neon-blue">{user?.username}</span>

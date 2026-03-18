@@ -32,7 +32,7 @@ const Login = () => {
                 className="glass-card p-10 w-full max-w-md relative z-10"
             >
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-primary-gradient mb-2 tracker-wider uppercase">Aegis Enterprise</h1>
+                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-primary-gradient mb-2 tracker-wider uppercase">EECAS Enterprise</h1>
                     <p className="text-gray-400 text-sm tracking-widest">EXPENSE & COMPLIANCE SYSTEM</p>
                 </div>
 

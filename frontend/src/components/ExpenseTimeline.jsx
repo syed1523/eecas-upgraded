@@ -43,12 +43,33 @@ const ExpenseTimeline = ({ expenseId, onClose }) => {
     };
 
     const parseState = (state) => {
+        if (!state) return null;
+        let parsedState;
         try {
-            return state ? JSON.parse(state) : null;
+            parsedState = JSON.parse(state);
         } catch (e) {
-            return null;
+            parsedState = state;
         }
+        return parsedState;
     };
+
+    let parsedBeforeState;
+    if (selectedStep?.beforeState) {
+        try {
+            parsedBeforeState = JSON.parse(selectedStep.beforeState);
+        } catch (e) {
+            parsedBeforeState = selectedStep.beforeState;
+        }
+    }
+
+    let parsedAfterState;
+    if (selectedStep?.afterState) {
+        try {
+            parsedAfterState = JSON.parse(selectedStep.afterState);
+        } catch (e) {
+            parsedAfterState = selectedStep.afterState;
+        }
+    }
 
     return (
         <motion.div
@@ -165,7 +186,7 @@ const ExpenseTimeline = ({ expenseId, onClose }) => {
                                     <div className="text-[10px] text-slate-600 uppercase font-bold">Before</div>
                                     <div className="p-3 bg-red-500/5 rounded-lg border border-red-500/10 text-[11px] font-mono text-slate-400 whitespace-pre">
                                         {selectedStep.beforeState ?
-                                            JSON.stringify(JSON.parse(selectedStep.beforeState), null, 2)
+                                            JSON.stringify(parsedBeforeState, null, 2)
                                             : "NULL"}
                                     </div>
                                 </div>
@@ -173,7 +194,7 @@ const ExpenseTimeline = ({ expenseId, onClose }) => {
                                     <div className="text-[10px] text-slate-600 uppercase font-bold">After</div>
                                     <div className="p-3 bg-emerald-500/5 rounded-lg border border-emerald-500/10 text-[11px] font-mono text-slate-200 whitespace-pre">
                                         {selectedStep.afterState ?
-                                            JSON.stringify(JSON.parse(selectedStep.afterState), null, 2)
+                                            JSON.stringify(parsedAfterState, null, 2)
                                             : "NULL"}
                                     </div>
                                 </div>
