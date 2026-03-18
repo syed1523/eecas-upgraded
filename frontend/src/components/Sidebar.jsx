@@ -8,6 +8,7 @@ import {
     CheckSquare,
     ShieldCheck,
     DollarSign,
+    MessageSquare,
     LogOut,
     Eye,
     Shield,
@@ -58,7 +59,10 @@ const Sidebar = () => {
         // Role-specific sections — each role gets only their domain
         ...(isManager ? [{ path: '/manager-hub', label: 'Manager Hub', icon: CheckSquare }] : []),
         ...(isAuditor ? [{ path: '/auditor-center', label: 'Forensic Center', icon: ShieldCheck }] : []),
-        ...(isFinance ? [{ path: '/finance-desk', label: 'Finance Desk', icon: DollarSign }] : []),
+        ...(isFinance ? [
+            { path: '/finance-desk', label: 'Finance Desk', icon: DollarSign },
+            { path: '/finance/nl-query', label: 'NL Query', icon: MessageSquare },
+        ] : []),
 
         // ADMIN ONLY — governance nav
         ...(isAdmin ? [{ path: '/admin', label: 'Admin Portal', icon: Shield }] : []),

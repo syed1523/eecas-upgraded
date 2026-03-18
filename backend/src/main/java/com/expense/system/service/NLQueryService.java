@@ -4,117 +4,79 @@ import com.expense.system.entity.Expense;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @Service
 public class NLQueryService {
 
-    @Value("${groq.api.key}")
-    private String groqApiKey;
-
     private static final String GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
     private static final String MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
-
-    private static final Pattern DANGEROUS = Pattern.compile(
-            "\\b(DELETE|DROP|INSERT|UPDATE|TRUNCATE|ALTER|CREATE|EXEC|EXECUTE)\\b",
-            Pattern.CASE_INSENSITIVE);
+    private static final List<String> UNSAFE_USER_TERMS = List.of(
+            "delete", "drop", "insert", "update", "truncate", "alter", "exec", "script");
+    private static final List<String> UNSAFE_JPQL_TERMS = List.of(
+            "delete", "drop", "insert", "update", "truncate");
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Value("${groq.api.key}")
+    private String groqApiKey;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
-    /**
-     * Accepts a plain-English query, converts it to JPQL via Groq, validates,
-     * executes, and returns matching Expense rows.
-     */
-    public List<Expense> nlQuery(String naturalQuery) {
-        String jpql = buildJpql(naturalQuery);
-        return executeQuery(jpql);
-    }
-
-    // ── Step 1: NL → JPQL via Groq ───────────────────────────────────────────
-
-    private String buildJpql(String naturalQuery) {
-        String systemPrompt = """
-                You are a JPQL query generator for a Java Spring Boot application.
-                The only entity you may query is 'Expense' with alias 'e'.
-                
-                Available fields on Expense:
-                  e.id, e.title, e.description, e.amount, e.currency, e.expenseDate,
-                  e.category, e.status, e.flagged, e.riskScore, e.riskLevel,
-                  e.isAnomaly, e.anomalyScore, e.anomalyReason, e.flagReasons,
-                  e.flagCount, e.departmentName, e.project, e.createdAt,
-                  e.user.username (via JOIN FETCH or path expression)
-                
-                Rules:
-                - Output ONLY the JPQL query string — no explanation, no markdown, no code fences.
-                - Always start with: SELECT e FROM Expense e
-                - You may use WHERE, ORDER BY, LIKE, BETWEEN, IN.
-                - For amounts use INR (no currency conversion).
-                - For "this month" or relative dates, use a reasonable JPQL FUNCTION or omit date filter.
-                - NEVER use DELETE, DROP, INSERT, UPDATE, TRUNCATE, ALTER, CREATE.
-                - Do not include semicolons.
-                """;
-
-        Map<String, Object> body = Map.of(
-                "model", MODEL,
-                "messages", List.of(
-                        Map.of("role", "system", "content", systemPrompt),
-                        Map.of("role", "user", "content", naturalQuery)
-                ),
-                "temperature", 0.1,
-                "max_tokens", 256
-        );
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(groqApiKey);
-
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-
-        ResponseEntity<Map> response = restTemplate.postForEntity(GROQ_URL, request, Map.class);
-
-        @SuppressWarnings("unchecked")
-        List<Map<String, Object>> choices = (List<Map<String, Object>>) response.getBody().get("choices");
-        @SuppressWarnings("unchecked")
-        Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
-        String jpql = ((String) message.get("content")).trim();
-
-        // Strip markdown code fences if model included them
-        if (jpql.startsWith("```")) {
-            jpql = jpql.replaceAll("```[a-z]*\\n?", "").trim();
-        }
-
-        return jpql;
-    }
-
-    // ── Step 2: Safety Validation + Execution ────────────────────────────────
-
-    @SuppressWarnings("unchecked")
-    private List<Expense> executeQuery(String jpql) {
-        if (DANGEROUS.matcher(jpql).find()) {
-            throw new IllegalArgumentException(
-                    "Query rejected: contains disallowed SQL/JPQL keyword.");
-        }
-
-        if (!jpql.toUpperCase().contains("SELECT") || !jpql.toUpperCase().contains("FROM EXPENSE")) {
-            throw new IllegalArgumentException(
-                    "Query rejected: must be a SELECT query on the Expense entity.");
+    public List<Expense> executeNLQuery(String userQuery) {
+        String loweredUserQuery = userQuery.toLowerCase();
+        if (containsUnsafeTerm(loweredUserQuery, UNSAFE_USER_TERMS)) {
+            throw new RuntimeException("Unsafe query blocked: " + userQuery);
         }
 
         try {
-            return entityManager.createQuery(jpql, Expense.class)
-                    .setMaxResults(200)
+            Map<String, Object> requestBody = Map.of(
+                    "model", MODEL,
+                    "max_tokens", 200,
+                    "messages", List.of(
+                            Map.of(
+                                    "role", "system",
+                                    "content", "You are a JPQL expert. Convert the user English question into a valid JPQL query for the Expense entity only. Available fields on Expense: id, amount, category, status, currency, departmentName, isAnomaly, anomalyScore, riskLevel, description, createdAt. The JPQL must start with SELECT e FROM Expense e. Return ONLY the JPQL string. No explanation. No markdown. No backticks. No prefix text."),
+                            Map.of("role", "user", "content", userQuery)
+                    )
+            );
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(groqApiKey);
+
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
+            ResponseEntity<Map> response = restTemplate.postForEntity(GROQ_URL, request, Map.class);
+
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> choices = (List<Map<String, Object>>) response.getBody().get("choices");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
+            Object content = message.get("content");
+            String jpqlString = content == null ? "" : content.toString().trim();
+
+            if (containsUnsafeTerm(jpqlString.toLowerCase(), UNSAFE_JPQL_TERMS)) {
+                throw new RuntimeException("Generated unsafe JPQL blocked");
+            }
+
+            return entityManager.createQuery(jpqlString, Expense.class)
+                    .setMaxResults(50)
                     .getResultList();
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("JPQL execution failed: " + ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new RuntimeException("NL Query failed: " + e.getMessage());
         }
+    }
+
+    private boolean containsUnsafeTerm(String value, List<String> terms) {
+        return terms.stream().anyMatch(value::contains);
     }
 }

@@ -28,19 +28,14 @@ public class AuditController {
     public ResponseEntity<?> naturalLanguageQuery(@RequestBody Map<String, String> body) {
         String query = body.get("query");
         if (query == null || query.isBlank()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Query must not be blank."));
+            return ResponseEntity.badRequest().body("Query cannot be empty");
         }
 
         try {
-            List<Expense> results = nlQueryService.nlQuery(query.trim());
+            List<Expense> results = nlQueryService.executeNLQuery(query);
             return ResponseEntity.ok(results);
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", ex.getMessage()));
-        } catch (Exception ex) {
-            return ResponseEntity.internalServerError()
-                    .body(Map.of("error", "Internal error: " + ex.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 }

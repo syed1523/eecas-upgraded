@@ -9,6 +9,7 @@ import Admin from './pages/Admin';
 import ManagerHub from './pages/ManagerHub';
 import AuditorCenter from './pages/AuditorCenter';
 import FinanceDesk from './pages/FinanceDesk';
+import NLQueryPage from './pages/NLQueryPage';
 import PrivateRoute, { RoleRoute } from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
 import './index.css';
@@ -54,6 +55,7 @@ function App() {
               {/* Finance Desk — Finance only */}
               <Route element={<RoleRoute allowed={['ROLE_FINANCE']} />}>
                 <Route path="/finance-desk" element={<FinanceDesk />} />
+                <Route path="/finance/nl-query" element={<NLQueryPage />} />
               </Route>
 
               {/* Admin Governance Portal — ADMIN only */}
