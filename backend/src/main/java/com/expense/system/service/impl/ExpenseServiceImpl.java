@@ -215,7 +215,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         } else if (expense.isFlagged()) {
             expense.setStatus("FLAGGED");
         } else {
-            expense.setStatus("PENDING_MANAGER");
+            boolean isManager = user.getRoles().stream()
+                    .anyMatch(r -> "ROLE_MANAGER".equals(r.getName().name()));
+            if (isManager) {
+                expense.setStatus("PENDING_FINANCE");
+            } else {
+                expense.setStatus("PENDING_MANAGER");
+            }
         }
 
         // Budget check (non-blocking monitor)

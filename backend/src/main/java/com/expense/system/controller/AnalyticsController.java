@@ -62,6 +62,7 @@ public class AnalyticsController {
     private final AuditLogRepository auditLogRepository;
     private final OverrideLogRepository overrideLogRepository;
     private final DepartmentRepository departmentRepository;
+    private final com.expense.system.repository.BudgetRepository budgetRepository;
 
     private User getAuthenticatedUser(Authentication auth) {
         return userRepository.findByUsername(auth.getName())
@@ -104,6 +105,69 @@ public class AnalyticsController {
         User user = getAuthenticatedUser(auth);
         String deptName = user.getDepartment() != null ? user.getDepartment().getName() : "UNASSIGNED";
         return ResponseEntity.ok(buildComplianceTrend(getExpensesForDepartment(deptName)));
+    }
+
+    @GetMapping("/manager/burn-rate")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Map<String, Object>> getManagerBurnRate(Authentication auth) {
+        User user = getAuthenticatedUser(auth);
+        String deptName = user.getDepartment() != null ? user.getDepartment().getName() : null;
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        if (deptName == null) {
+            result.put("budgetTotal", 0);
+            result.put("budgetUsed", 0);
+            result.put("utilizationPercent", 0.0);
+            result.put("warningThreshold", 80.0);
+            result.put("status", "SAFE");
+            result.put("department", "UNASSIGNED");
+            return ResponseEntity.ok(result);
+        }
+
+        var budgetOpt = budgetRepository.findByDepartment(deptName);
+        if (budgetOpt.isEmpty()) {
+            result.put("budgetTotal", 0);
+            result.put("budgetUsed", 0);
+            result.put("utilizationPercent", 0.0);
+            result.put("warningThreshold", 80.0);
+            result.put("status", "SAFE");
+            result.put("department", deptName);
+            result.put("noBudgetSet", true);
+            return ResponseEntity.ok(result);
+        }
+
+        var budget = budgetOpt.get();
+        var total = budget.getTotalAmount();
+        var used = budget.getUsedAmount() != null ? budget.getUsedAmount() : java.math.BigDecimal.ZERO;
+
+        double utilization = 0.0;
+        if (total != null && total.compareTo(java.math.BigDecimal.ZERO) > 0) {
+            utilization = used.multiply(java.math.BigDecimal.valueOf(100))
+                    .divide(total, 2, java.math.RoundingMode.HALF_UP).doubleValue();
+        }
+
+        double warningThreshold = 80.0;
+        if (budget.getSpendingLimit() != null && total != null && total.compareTo(java.math.BigDecimal.ZERO) > 0) {
+            warningThreshold = budget.getSpendingLimit().multiply(java.math.BigDecimal.valueOf(100))
+                    .divide(total, 2, java.math.RoundingMode.HALF_UP).doubleValue();
+        }
+
+        String status;
+        if (utilization >= 100.0) {
+            status = "CRITICAL";
+        } else if (utilization >= warningThreshold) {
+            status = "WARNING";
+        } else {
+            status = "SAFE";
+        }
+
+        result.put("budgetTotal", total);
+        result.put("budgetUsed", used);
+        result.put("utilizationPercent", utilization);
+        result.put("warningThreshold", warningThreshold);
+        result.put("status", status);
+        result.put("department", deptName);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/enterprise/overview")

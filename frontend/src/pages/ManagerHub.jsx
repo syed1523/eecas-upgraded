@@ -17,11 +17,13 @@ const ManagerHub = () => {
     const [overview, setOverview] = useState(null);
     const [trends, setTrends] = useState([]);
     const [alerts, setAlerts] = useState([]);
+    const [burnRate, setBurnRate] = useState(null);
 
     useEffect(() => {
         analyticsApi.getManagerOverview().then(r => setOverview(r.data)).catch(console.error);
         analyticsApi.getManagerTrends().then(r => setTrends(r.data || [])).catch(console.error);
         analyticsApi.getManagerAlerts().then(r => setAlerts(r.data || [])).catch(console.error);
+        analyticsApi.getManagerBurnRate().then(r => setBurnRate(r.data)).catch(console.error);
     }, []);
 
     useEffect(() => {
@@ -283,16 +285,37 @@ const ManagerHub = () => {
                         <div className="glass-card p-6">
                             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2"><Activity size={16} /> Burn Rate Indicator</h3>
                             <div className="h-48 flex flex-col justify-center space-y-4">
-                                <p className="text-xs text-gray-400">Current month budget tracking</p>
-                                <div className="w-full bg-white/5 rounded-full h-8 overflow-hidden relative shadow-inner border border-white/10">
-                                    <div className="bg-gradient-to-r from-green-500 to-yellow-500 h-full w-[65%]" />
-                                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white uppercase tracking-widest drop-shadow-md">65% Utilized</span>
-                                </div>
-                                <div className="flex justify-between text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                    <span>Safe</span>
-                                    <span>Warning</span>
-                                    <span>Critical</span>
-                                </div>
+                                {burnRate ? (
+                                    <>
+                                        <p className="text-xs text-gray-400">
+                                            {burnRate.department || 'Department'} — {burnRate.noBudgetSet ? 'No budget configured' : 'Current period budget tracking'}
+                                        </p>
+                                        <div className="w-full bg-white/5 rounded-full h-8 overflow-hidden relative shadow-inner border border-white/10">
+                                            <div
+                                                className={`h-full transition-all duration-1000 ease-out ${
+                                                    burnRate.status === 'CRITICAL'
+                                                        ? 'bg-gradient-to-r from-red-500 to-red-700'
+                                                        : burnRate.status === 'WARNING'
+                                                            ? 'bg-gradient-to-r from-yellow-500 to-orange-500'
+                                                            : 'bg-gradient-to-r from-green-500 to-emerald-400'
+                                                }`}
+                                                style={{ width: `${Math.min(burnRate.utilizationPercent, 100)}%` }}
+                                            />
+                                            <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white uppercase tracking-widest drop-shadow-md">
+                                                {burnRate.utilizationPercent?.toFixed(1)}% Utilized
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between text-xs text-gray-500">
+                                            <span>₹{Number(burnRate.budgetUsed).toLocaleString('en-IN')} used</span>
+                                            <span className={`font-bold uppercase tracking-wider ${
+                                                burnRate.status === 'CRITICAL' ? 'text-red-400' : burnRate.status === 'WARNING' ? 'text-yellow-400' : 'text-green-400'
+                                            }`}>{burnRate.status}</span>
+                                            <span>₹{Number(burnRate.budgetTotal).toLocaleString('en-IN')} total</span>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <p className="text-gray-500 text-xs text-center">Loading burn rate...</p>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -40,6 +40,7 @@ com\expense\system\entity\Role.class
 com\expense\system\exception\InvalidStateTransitionException.class
 com\expense\system\service\PolicyEngine.class
 com\expense\system\repository\RoleRepository.class
+com\expense\system\controller\AuditController.class
 com\expense\system\exception\GlobalExceptionHandler.class
 com\expense\system\repository\ApprovalRepository.class
 com\expense\system\entity\Expense$ExpenseBuilder.class
@@ -65,6 +66,7 @@ com\expense\system\controller\AnalyticsController.class
 com\expense\system\service\PreApprovalCheckService.class
 com\expense\system\entity\AuditFinding$AuditFindingBuilder.class
 com\expense\system\service\AuditService.class
+com\expense\system\service\NLQueryService.class
 com\expense\system\entity\AuditLog$AuditLogBuilder.class
 com\expense\system\security\jwt\JwtUtils.class
 com\expense\system\dto\DTOMapper.class

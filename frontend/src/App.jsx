@@ -31,8 +31,8 @@ function App() {
               {/* Overview — all authenticated users */}
               <Route path="/" element={<Dashboard />} />
 
-              {/* EMPLOYEE only — ADMIN explicitly excluded from expense submission */}
-              <Route element={<RoleRoute allowed={['ROLE_EMPLOYEE']} />}>
+              {/* EMPLOYEE and MANAGER — ADMIN explicitly excluded from expense submission */}
+              <Route element={<RoleRoute allowed={['ROLE_EMPLOYEE', 'ROLE_MANAGER']} />}>
                 <Route path="/submit-expense" element={<SubmitExpense />} />
                 <Route path="/my-expenses" element={<MyExpenses />} />
               </Route>

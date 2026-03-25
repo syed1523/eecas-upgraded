@@ -308,18 +308,26 @@ const MyExpenses = () => {
                                                 </div>
                                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass-card p-4 rounded-xl border-white/5 shadow">
                                                     <div className="flex items-center justify-between space-x-2 mb-1">
-                                                        <div className="font-bold text-white text-sm">{event.newValue || event.action}</div>
+                                                    <div className="font-bold text-white text-sm">{event.action?.replace(/_/g, ' ') || 'Unknown Action'}</div>
                                                         <time className="font-mono text-[10px] text-gray-500">{new Date(event.timestamp).toLocaleString()}</time>
                                                     </div>
                                                     <div className="text-gray-400 text-xs">
                                                         Action by: <span className="text-neon-blue font-medium">{event.performedBy || 'System'}</span>
                                                     </div>
-                                                    {event.action.includes('OVERRIDE') && (
+                                                    {event.afterState && (
+                                                        <div className="text-gray-500 text-[10px] mt-1 font-mono truncate" title={event.afterState}>
+                                                            → {event.afterState}
+                                                        </div>
+                                                    )}
+                                                    {event.changeSummary && (
+                                                        <div className="text-gray-400 text-[10px] mt-1">{event.changeSummary}</div>
+                                                    )}
+                                                    {event.action?.includes('OVERRIDE') && (
                                                         <div className="mt-2 text-[10px] bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-1 rounded inline-block">
                                                             SECURITY OVERRIDE DETECTED
                                                         </div>
                                                     )}
-                                                    {event.newValue === 'ESCALATED' && (
+                                                    {event.afterState === 'ESCALATED' && (
                                                         <div className="mt-2 text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-1 rounded inline-block">
                                                             SLA ESCALATION MARKER
                                                         </div>

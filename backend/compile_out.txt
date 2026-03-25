@@ -1,0 +1,190 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< com.expense:system >-------------------------
+[INFO] Building AegisEnterprise 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ system ---
+[INFO] Deleting C:\Users\SYEDABUTHAIR\.gemini\antigravity\playground\twilight-magnetosphere\backend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ system ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ system ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 112 source files with javac [debug release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[48,9] illegal start of type
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[48,16] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[51,9] illegal start of type
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[51,17] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[51,42] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[51,44] ';' expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[62,9] illegal start of type
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[62,33] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[62,64] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[68,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[68,93] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[70,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[71,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[72,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[77,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[77,72] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[80,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[81,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[82,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[83,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[85,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[86,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[87,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[93,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[93,96] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[95,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[96,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[101,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[101,97] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[103,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[104,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[105,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[110,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[112,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[113,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[118,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[120,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[121,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[126,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[127,40] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[131,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[132,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[136,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[137,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[138,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[143,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[146,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[159,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[161,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[165,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[174,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[179,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[181,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[182,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[184,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[186,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[189,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[192,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[197,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[200,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[201,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[202,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[203,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[204,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[205,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[206,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[207,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[208,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[210,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[212,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[217,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[222,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[224,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[225,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[231,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[234,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/service/impl/ExpenseServiceImpl.java:[232,5] illegal start of expression
+[INFO] 77 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.469 s
+[INFO] Finished at: 2026-03-24T13:32:46+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project system: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[48,9] illegal start of type
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[48,16] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[51,9] illegal start of type
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[51,17] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[51,42] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[51,44] ';' expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[62,9] illegal start of type
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[62,33] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[62,64] <identifier> expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[68,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[68,93] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[70,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[71,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[72,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[77,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[77,72] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[80,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[81,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[82,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[83,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[85,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[86,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[87,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[93,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[93,96] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[95,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[96,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[101,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[101,97] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[103,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[104,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[105,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[110,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[112,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[113,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[118,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[120,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[121,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[126,12] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[127,40] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[131,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[132,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[136,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[137,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[138,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[143,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[146,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[159,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[161,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[165,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[174,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[179,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[181,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[182,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[184,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[186,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[189,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[192,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[197,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[200,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[201,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[202,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[203,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[204,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[205,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[206,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[207,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[208,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[210,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[212,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[217,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[222,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[224,9] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[225,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[231,13] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/controller/ExpenseController.java:[234,5] class, interface, enum, or record expected
+[ERROR] /C:/Users/SYEDABUTHAIR/.gemini/antigravity/playground/twilight-magnetosphere/backend/src/main/java/com/expense/system/service/impl/ExpenseServiceImpl.java:[232,5] illegal start of expression
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

@@ -30,6 +30,7 @@ api.interceptors.response.use(
 export const expenseApi = {
     getAllRequest: (page = 0, size = 10) => api.get(`/expenses?page=${page}&size=${size}`),
     getMyExpenses: (page = 0, size = 10) => api.get(`/expenses/my?page=${page}&size=${size}`),
+    getPaymentQueue: (page = 0, size = 10) => api.get(`/expenses/payment-queue?page=${page}&size=${size}`),
     submit: (formData) => api.post('/expenses', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }),
@@ -44,7 +45,7 @@ export const approvalApi = {
     approve: (id, comments) => api.post(`/approvals/${id}`, { action: 'APPROVE', comments }),
     reject: (id, comments) => api.post(`/approvals/${id}`, { action: 'REJECT', comments }),
     escalate: (id, reason) => api.post(`/approvals/${id}/escalate`, { reason }),
-    pay: (id) => api.post(`/approvals/${id}/pay`, {}), // Empty body for post
+    pay: (id) => api.post(`/approvals/${id}/pay`, {}),
 };
 
 // Manager Scoped APIs

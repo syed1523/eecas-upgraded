@@ -44,14 +44,12 @@ const Sidebar = () => {
     // ── Nav items are strictly role-scoped ───────────────────────────────────
     // ADMIN is a governance-only role:
     //   - NO Submit Expense   (not in expense lifecycle)
-    //   - NO My Expenses      (no personal financial records)
-    //   - NO Approval Queue   (not a transaction approver)
-    //   - ONLY: Overview + Admin Governance Portal
+
     const navItems = [
         { path: '/', label: 'Overview', icon: LayoutDashboard },
 
-        // EMPLOYEE ONLY — ADMIN explicitly excluded
-        ...(isEmployee ? [
+        // EMPLOYEE and MANAGER — ADMIN explicitly excluded
+        ...( (isEmployee || isManager) ? [
             { path: '/submit-expense', label: 'Submit Expense', icon: PlusCircle },
             { path: '/my-expenses', label: 'My Expenses', icon: FileText },
         ] : []),

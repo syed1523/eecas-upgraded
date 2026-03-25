@@ -43,12 +43,14 @@ public class ExpenseController {
     @Autowired
     private ApprovalRepository approvalRepository;
 
-    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @Autowired
+    private com.expense.system.repository.ExpenseRepository expenseRepository;
+    @org.springframework.web.bind.annotation.PostMapping(consumes = { org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE })
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER')")
     @org.springframework.transaction.annotation.Transactional
-    public ResponseEntity<ExpenseResponseDTO> submitExpense(
-            @Valid @RequestPart("expense") ExpenseDTO expenseDTO,
-            @RequestPart(value = "file", required = false) MultipartFile file) {
+    public org.springframework.http.ResponseEntity<com.expense.system.dto.ExpenseResponseDTO> submitExpense(
+            @jakarta.validation.Valid @org.springframework.web.bind.annotation.RequestPart("expense") com.expense.system.dto.ExpenseDTO expenseDTO,
+            @org.springframework.web.bind.annotation.RequestPart(value = "file", required = false) org.springframework.web.multipart.MultipartFile file) {
 
         System.out.println("Received Expense Submission: " + expenseDTO);
         if (file != null)
@@ -56,7 +58,7 @@ public class ExpenseController {
         else
             System.out.println("No File Received");
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         System.out.println("User: " + username);
 
@@ -71,18 +73,18 @@ public class ExpenseController {
             }
         }
 
-        Expense savedExpense = expenseService.submitExpense(expenseDTO, username);
-        return ResponseEntity.ok(DTOMapper.toExpenseResponseDTO(savedExpense));
+        com.expense.system.entity.Expense savedExpense = expenseService.submitExpense(expenseDTO, username);
+        return org.springframework.http.ResponseEntity.ok(com.expense.system.dto.DTOMapper.toExpenseResponseDTO(savedExpense));
     }
 
-    @PostMapping(value = "/draft", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @org.springframework.web.bind.annotation.PostMapping(value = "/draft", consumes = { org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE, org.springframework.http.MediaType.APPLICATION_JSON_VALUE })
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER')")
     @org.springframework.transaction.annotation.Transactional
-    public ResponseEntity<ExpenseResponseDTO> saveDraft(
-            @RequestPart(value = "expense", required = false) ExpenseDTO expenseDTO,
-            @RequestPart(value = "file", required = false) MultipartFile file) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        ExpenseDTO dto = expenseDTO;
+    public org.springframework.http.ResponseEntity<com.expense.system.dto.ExpenseResponseDTO> saveDraft(
+            @org.springframework.web.bind.annotation.RequestPart(value = "expense", required = false) com.expense.system.dto.ExpenseDTO expenseDTO,
+            @org.springframework.web.bind.annotation.RequestPart(value = "file", required = false) org.springframework.web.multipart.MultipartFile file) {
+        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        com.expense.system.dto.ExpenseDTO dto = expenseDTO;
         if (dto == null) {
             throw new RuntimeException("Expense data is required");
         }
@@ -133,6 +135,15 @@ public class ExpenseController {
         return ResponseEntity.ok(expenses.map(DTOMapper::toExpenseResponseDTO));
     }
 
+    @GetMapping("/payment-queue")
+    @PreAuthorize("hasRole('FINANCE') or hasRole('ADMIN')")
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public ResponseEntity<Page<ExpenseResponseDTO>> getPaymentQueue(@PageableDefault(size = 10) Pageable pageable) {
+        List<String> payableStatuses = List.of("APPROVED", "CLEARED", "APPROVED_PENDING_PAYMENT");
+        Page<Expense> expenses = expenseRepository.findByStatusIn(payableStatuses, pageable);
+        return ResponseEntity.ok(expenses.map(DTOMapper::toExpenseResponseDTO));
+    }
+
     @GetMapping("/dashboard/summary")
     @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('FINANCE') or hasRole('ADMIN') or hasRole('AUDITOR') or hasRole('COMPLIANCE')")
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
@@ -153,7 +164,7 @@ public class ExpenseController {
     @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('FINANCE') or hasRole('ADMIN') or hasRole('AUDITOR')")
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public ResponseEntity<java.util.List<com.expense.system.entity.AuditLog>> getExpenseTimeline(
-            @PathVariable Long id) {
+            @PathVariable(name = "id") Long id) {
         // Fetch audit logs for this specific expense to build the visual timeline
         java.util.List<com.expense.system.entity.AuditLog> logs = auditLogRepository
                 .findByEntityIdAndEntityType(id, "Expense");

@@ -19,8 +19,11 @@ const FinanceDesk = () => {
 
     useEffect(() => {
         if (activeTab === 'approvals') fetchApprovals();
-        else fetchPaymentQueue();
-    }, [activeTab]);
+    }, [activeTab, approvalPage]);
+
+    useEffect(() => {
+        if (activeTab === 'payments') fetchPaymentQueue();
+    }, [activeTab, paymentPage]);
 
     const fetchApprovals = async () => {
         setLoading(true);
@@ -38,12 +41,8 @@ const FinanceDesk = () => {
     const fetchPaymentQueue = async () => {
         setLoading(true);
         try {
-            const res = await expenseApi.getAllRequest(paymentPage, 10);
-            const content = res.data.content || [];
-            const payable = content.filter(e =>
-                (e.status === 'APPROVED' || e.status === 'CLEARED' || e.status === 'APPROVED_PENDING_PAYMENT')
-            );
-            setPaymentQueue(payable);
+            const res = await expenseApi.getPaymentQueue(paymentPage, 10);
+            setPaymentQueue(res.data.content || []);
             setPaymentTotalPages(res.data.totalPages || 0);
         } catch (err) {
             console.error(err);

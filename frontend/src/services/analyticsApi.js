@@ -22,6 +22,7 @@ export const analyticsApi = {
     getManagerOverview: () => axios.get(`${BASE_URL}/analytics/manager/overview`, { headers: getAuthHeader() }),
     getManagerTrends: () => axios.get(`${BASE_URL}/analytics/manager/trends`, { headers: getAuthHeader() }),
     getManagerAlerts: () => axios.get(`${BASE_URL}/alerts/manager`, { headers: getAuthHeader() }),
+    getManagerBurnRate: () => axios.get(`${BASE_URL}/analytics/manager/burn-rate`, { headers: getAuthHeader() }),
 
     // Admin / Enterprise
     getEnterpriseOverview: () => axios.get(`${BASE_URL}/analytics/enterprise/overview`, { headers: getAuthHeader() }),
